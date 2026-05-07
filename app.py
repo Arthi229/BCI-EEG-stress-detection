@@ -2974,26 +2974,27 @@ if page == "🧠 EEG Examination":
 
                 st.success("✅ Examination Saved Successfully")
 
+# =====================================================
 # LIVE MONITORING
+# =====================================================
 
 if page == "📡 Live Monitoring":
 
     # =====================================================
-    # IMPORTS
+    # BRAINFLOW IMPORTS DISABLED FOR STREAMLIT CLOUD
     # =====================================================
-    from brainflow.board_shim import BoardShim
-    from brainflow.board_shim import BrainFlowInputParams
-    from brainflow.board_shim import BoardIds
+
+    # from brainflow.board_shim import BoardShim
+    # from brainflow.board_shim import BrainFlowInputParams
+    # from brainflow.board_shim import BoardIds
 
     # =====================================================
     # CSS
     # =====================================================
+
     st.markdown("""
         <style>
 
-        /* =====================================================
-        WORKING GLITTER EFFECT
-        ===================================================== */
         [data-testid="stAppViewContainer"]::before{
 
             content:"";
@@ -3039,9 +3040,6 @@ if page == "📡 Live Monitoring":
             }
         }
 
-        /* =====================================================
-        TITLE
-        ===================================================== */
         h3{
 
             font-size:42px !important;
@@ -3061,9 +3059,6 @@ if page == "📡 Live Monitoring":
             -webkit-text-fill-color:transparent;
         }
 
-        /* =====================================================
-        CARD
-        ===================================================== */
         .live-card{
 
             background:
@@ -3086,9 +3081,6 @@ if page == "📡 Live Monitoring":
             backdrop-filter:blur(18px);
         }
 
-        /* =====================================================
-        BUTTON
-        ===================================================== */
         .stButton>button{
 
             background:
@@ -3120,114 +3112,97 @@ if page == "📡 Live Monitoring":
             scale(1.02);
         }
 
-        /* =====================================================
-        SELECT BOX
-        ===================================================== */
-        div[data-baseweb="select"] > div{
-
-            background:
-            rgba(2,6,23,0.92) !important;
-
-            color:white !important;
-
-            border:
-            1px solid rgba(56,189,248,0.14) !important;
-
-            border-radius:18px !important;
-        }
-
-        /* =====================================================
-        TEXT INPUT
-        ===================================================== */
-        .stTextInput input{
-
-            background:
-            rgba(2,6,23,0.92) !important;
-
-            color:white !important;
-
-            border:
-            1px solid rgba(56,189,248,0.14) !important;
-
-            border-radius:18px !important;
-        }
-
-        /* =====================================================
-        ALERT BOXES
-        ===================================================== */
-        .stSuccess,
-        .stError,
-        .stInfo{
-
-            border-radius:18px !important;
-
-            background:
-            rgba(15,23,42,0.92) !important;
-        }
-
         </style>
-    """,unsafe_allow_html=True,)
+    """, unsafe_allow_html=True)
 
-# =====================================================
-# TITLE
-# =====================================================
+    # =====================================================
+    # TITLE
+    # =====================================================
+
     st.subheader("📡 Real-Time EEG Monitoring")
 
     st.markdown("""
         <div class="live-card">
-    """,unsafe_allow_html=True,)
+    """, unsafe_allow_html=True)
 
     # =====================================================
     # DEVICE MODE
     # =====================================================
-    device_mode = st.selectbox("🧠 EEG Source", ["Simulation Mode", "Real EEG Device"])
+
+    device_mode = st.selectbox(
+        "🧠 EEG Source",
+        [
+            "Simulation Mode",
+            "Real EEG Device"
+        ]
+    )
 
     # =====================================================
-    # DEVICE CONFIGURATION
+    # REAL DEVICE DISABLED
     # =====================================================
+
     if device_mode == "Real EEG Device":
 
-        st.info("Connect your EEG hardware device")
-
-        device_type = st.selectbox(
-            "📟 Device Type", ["OpenBCI", "Muse Headband", "NeuroSky", "Custom Device"]
+        st.warning(
+            "⚠ Real EEG Device mode is not supported in Streamlit Cloud deployment. Use Simulation Mode."
         )
-
-        port = st.text_input("🔌 COM Port", value="COM3")
-
-        baud_rate = st.selectbox("⚡ Baud Rate", [9600, 115200, 256000])
 
     # =====================================================
     # START MONITORING
     # =====================================================
-    if st.button("🚀 Start Monitoring", use_container_width=True):
+
+    if st.button(
+        "🚀 Start Monitoring",
+        use_container_width=True
+    ):
 
         placeholder = st.empty()
 
         # =================================================
         # SIMULATION MODE
         # =================================================
+
         if device_mode == "Simulation Mode":
 
             st.success("✅ Simulation Started")
 
             for i in range(100):
 
-                x = np.linspace(0, 2 * np.pi, 500)
+                x = np.linspace(
+                    0,
+                    2 * np.pi,
+                    500
+                )
 
-                y = np.sin(5 * x + i * 0.3) + 0.5 * np.sin(15 * x)
+                y = (
+                    np.sin(5 * x + i * 0.3)
+                    +
+                    0.5 * np.sin(15 * x)
+                )
 
-                fig, ax = plt.subplots(figsize=(10, 4))
+                fig, ax = plt.subplots(
+                    figsize=(10, 4)
+                )
 
                 fig.patch.set_facecolor("#0F172A")
 
                 ax.set_facecolor("#0F172A")
 
-                ax.plot(x, y, color="#38BDF8", linewidth=2)
+                ax.plot(
+                    x,
+                    y,
+                    color="#38BDF8",
+                    linewidth=2
+                )
 
-                ax.set_title("Simulated EEG Signal", color="white")
+                ax.set_title(
+                    "Simulated EEG Signal",
+                    color="white"
+                )
 
-                ax.tick_params(colors="white")
+                ax.tick_params(
+                    colors="white"
+                )
 
                 ax.grid(alpha=0.2)
 
@@ -3238,107 +3213,19 @@ if page == "📡 Live Monitoring":
                 time.sleep(0.1)
 
         # =================================================
-        # REAL EEG DEVICE MODE
+        # REAL DEVICE MESSAGE
         # =================================================
+
         else:
 
-            try:
-
-                params = BrainFlowInputParams()
-
-                # =========================================
-                # OPENBCI
-                # =========================================
-                if device_type == "OpenBCI":
-
-                    params.serial_port = port
-
-                    board = BoardShim(BoardIds.SYNTHETIC_BOARD.value, params)
-
-                # =========================================
-                # MUSE
-                # =========================================
-                elif device_type == "Muse Headband":
-
-                    board = BoardShim(BoardIds.MUSE_2_BOARD.value, params)
-
-                # =========================================
-                # NEUROSKY
-                # =========================================
-                elif device_type == "NeuroSky":
-
-                    params.serial_port = port
-
-                    board = BoardShim(BoardIds.NEUROSKY_BOARD.value, params)
-
-                # =========================================
-                # CUSTOM DEVICE
-                # =========================================
-                else:
-
-                    params.serial_port = port
-
-                    board = BoardShim(BoardIds.SYNTHETIC_BOARD.value, params)
-
-                # =========================================
-                # START SESSION
-                # =========================================
-                board.prepare_session()
-
-                board.start_stream()
-
-                st.success(f"✅ Connected to {device_type}")
-
-                eeg_channels = BoardShim.get_eeg_channels(board.get_board_id())
-
-                # =========================================
-                # LIVE STREAM LOOP
-                # =========================================
-                for i in range(200):
-
-                    data = board.get_current_board_data(256)
-
-                    if len(data) > 0:
-
-                        eeg_data = data[eeg_channels[0]]
-
-                        fig, ax = plt.subplots(figsize=(10, 4))
-
-                        fig.patch.set_facecolor("#0F172A")
-
-                        ax.set_facecolor("#0F172A")
-
-                        ax.plot(eeg_data, color="#22C55E", linewidth=2)
-
-                        ax.set_title(f"{device_type} Live EEG", color="white")
-
-                        ax.tick_params(colors="white")
-
-                        ax.grid(alpha=0.2)
-
-                        placeholder.pyplot(fig)
-
-                        plt.close(fig)
-
-                        time.sleep(0.1)
-
-                # =========================================
-                # STOP SESSION
-                # =========================================
-                board.stop_stream()
-
-                board.release_session()
-
-                st.success("✅ Monitoring Completed")
-
-            except Exception as e:
-
-                st.error(f"❌ Connection Error: {e}")
+            st.error(
+                "❌ Real EEG Device mode is unavailable in cloud deployment."
+            )
 
     st.markdown(
         """
-    </div>
-    """,
+        </div>
+        """,
         unsafe_allow_html=True,
     )
 
