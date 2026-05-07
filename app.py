@@ -785,7 +785,7 @@ class DummyModel:
 
     def predict(self, data):
 
-        return np.array([[0.10, 0.82, 0.08]])
+        return [np.array([0.10, 0.82, 0.08])]
 
 
 @st.cache_resource
