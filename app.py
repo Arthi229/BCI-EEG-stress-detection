@@ -2776,42 +2776,61 @@ if page == "🧠 EEG Examination":
 
                     try:
 
+                        # =====================================================
+                        # EEG DECISION LOGIC
+                        # =====================================================
+
                         if beta > 60:
 
-                            probabilities = np.array(
-                                [0.10, 0.82, 0.08]
-                            )
+                            predicted_class = "High Stress"
+
+                            confidence = float(beta)
+
+                            risk_score = float(beta)
 
                         elif alpha > 60:
 
-                            probabilities = np.array(
-                                [0.82, 0.08, 0.10]
-                            )
+                            predicted_class = "Relaxed"
+
+                            confidence = float(alpha)
+
+                            risk_score = 20.0
+
+                        elif gamma > 60:
+
+                            predicted_class = "Normal"
+
+                            confidence = float(gamma)
+
+                            risk_score = 40.0
 
                         else:
 
-                            probabilities = np.array(
-                                [0.20, 0.20, 0.60]
-                            )
+                            predicted_class = "Normal"
+
+                            confidence = 60.0
+
+                            risk_score = 40.0
+
                     except Exception as e:
 
                         st.error(f"Prediction Error: {e}")
 
-                        probabilities = np.array(
-                            [0.20, 0.20, 0.60]
-                        )
+                        predicted_class = "Normal"
 
-                    classes = ["Relaxed", "High Stress", "Normal"]
+                        confidence = 60.0
 
-                    predicted_class = classes[np.argmax(probabilities)]
+                        risk_score = 40.0
 
-                    confidence = float(np.max(probabilities) * 100)
+                    except Exception as e:
 
-                    risk_score = float(
-                        probabilities[
-                            classes.index("High Stress")
-                        ] * 100
-                    )
+                        st.error(f"Prediction Error: {e}")
+
+                        predicted_class = "Normal"
+
+                        confidence = 60.0
+
+                        risk_score = 40.0
 
                     st.session_state.prediction_done = True
 
@@ -2922,8 +2941,7 @@ if page == "🧠 EEG Examination":
                     ai_recommendation = "Normal"
 
                     auto_notes = f"""
-    Patient EEG analysis indicates RELAXED cognitive state.
-
+                Patient EEG analysis indicates NORMAL cognitive state.
     🧠 EEG SUMMARY
     • Stable alpha activity observed
     • Calm neurological condition identified
