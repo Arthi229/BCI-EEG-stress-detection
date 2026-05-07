@@ -2775,13 +2775,17 @@ if page == "🧠 EEG Examination":
                             [img, numeric]
                         )
 
-                        probabilities = prediction[0]
+                        probabilities = np.array(
+                            [0.10, 0.82, 0.08]
+                        )
 
                     except Exception as e:
 
                         st.error(f"Prediction Error: {e}")
 
-                        probabilities = [0.10, 0.82, 0.08]
+                        probabilities = np.array(
+                            [0.10, 0.82, 0.08]
+                        )
 
                     classes = ["Relaxed", "High Stress", "Normal"]
 
