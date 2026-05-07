@@ -2776,13 +2776,13 @@ if page == "🧠 EEG Examination":
 
                     try:
 
-                        if beta_pct > 60:
+                        if beta > 60:
 
                             probabilities = np.array(
                                 [0.10, 0.82, 0.08]
                             )
 
-                        elif alpha_pct > 60:
+                        elif alpha > 60:
 
                             probabilities = np.array(
                                 [0.82, 0.08, 0.10]
@@ -2793,7 +2793,6 @@ if page == "🧠 EEG Examination":
                             probabilities = np.array(
                                 [0.20, 0.20, 0.60]
                             )
-
                     except Exception as e:
 
                         st.error(f"Prediction Error: {e}")
