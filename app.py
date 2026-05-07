@@ -2771,56 +2771,56 @@ if page == "🧠 EEG Examination":
                     numeric = np.array([[alpha_pct, beta_pct, gamma_pct]])
 
                     # =====================================================
-                    # DYNAMIC AI LOGIC
+# DYNAMIC AI LOGIC
+# =====================================================
+
+                try:
+
+                    # =====================================================
+                    # EEG DECISION LOGIC
                     # =====================================================
 
-                    try:
+                    if (
+                        st.session_state.beta >= st.session_state.alpha
+                        and
+                        st.session_state.beta >= st.session_state.gamma
+                    ):
 
-                        # =====================================================
-                        # EEG DECISION LOGIC
-                        # =====================================================
+                        predicted_class = "High Stress"
 
-                        if st.session_state.beta >= 20:
+                        confidence = float(st.session_state.beta)
 
-                            predicted_class = "High Stress"
+                        risk_score = float(st.session_state.beta)
 
-                            confidence = float(st.session_state.beta)
+                    elif (
+                        st.session_state.alpha >= st.session_state.beta
+                        and
+                        st.session_state.alpha >= st.session_state.gamma
+                    ):
 
-                            risk_score = float(st.session_state.beta)
+                        predicted_class = "Relaxed"
 
-                        elif st.session_state.alpha >= 20:
+                        confidence = float(st.session_state.alpha)
 
-                            predicted_class = "Relaxed"
+                        risk_score = 20.0
 
-                            confidence = float(st.session_state.alpha)
-
-                            risk_score = 20.0
-
-                        elif st.session_state.gamma >= 20:
-
-                            predicted_class = "Normal"
-
-                            confidence = float(st.session_state.gamma)
-
-                            risk_score = 40.0
-
-                        else:
-
-                            predicted_class = "Normal"
-
-                            confidence = 60.0
-
-                            risk_score = 40.0
-
-                    except Exception as e:
-
-                        st.error(f"Prediction Error: {e}")
+                    else:
 
                         predicted_class = "Normal"
 
-                        confidence = 60.0
+                        confidence = float(st.session_state.gamma)
 
                         risk_score = 40.0
+
+                except Exception as e:
+
+                    st.error(f"Prediction Error: {e}")
+
+                    predicted_class = "Normal"
+
+                    confidence = 60.0
+
+                    risk_score = 40.0
 
 
                     st.session_state.prediction_done = True
