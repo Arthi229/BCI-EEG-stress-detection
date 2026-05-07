@@ -3,7 +3,7 @@ numpy
 pandas
 matplotlib
 opencv-python-headless
-tensorflow
-keras
+tensorflow==2.15.0
+keras==2.15.0
 scikit-learn
 streamlit-lottie
