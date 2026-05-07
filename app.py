@@ -779,15 +779,15 @@ init_db()
 
 # LOAD MODEL
 
-
 @st.cache_resource
 def load_trained_model():
 
-    return load_model("trained_hybrid_model.h5")
-
+    return load_model(
+        "trained_hybrid_model.h5",
+        compile=False
+    )
 
 model = load_trained_model()
-
 
 # SESSION VARIABLES
 
