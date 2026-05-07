@@ -782,10 +782,22 @@ init_db()
 @st.cache_resource
 def load_trained_model():
 
-    return load_model(
-        "trained_hybrid_model.h5",
-        compile=False
-    )
+    try:
+
+        model = load_model(
+            "trained_hybrid_model.h5",
+            compile=False,
+            safe_mode=False
+        )
+
+    except Exception as e:
+
+        st.error(f"Model loading failed: {e}")
+
+        model = None
+
+    return model
+
 
 model = load_trained_model()
 
