@@ -2770,175 +2770,74 @@ if page == "🧠 EEG Examination":
 
                     numeric = np.array([[alpha_pct, beta_pct, gamma_pct]])
 
-# =====================================================
-# TAB 1 - EEG SIGNAL
-# =====================================================
-with tab1:
-
-    with st.container(border=True):
-
-        alpha = st.slider(
-            "Alpha Activity",
-            0.0,
-            100.0,
-            20.0,
-            key="alpha_slider"
-        )
-
-        beta = st.slider(
-            "Beta Activity",
-            0.0,
-            100.0,
-            15.0,
-            key="beta_slider"
-        )
-
-        gamma = st.slider(
-            "Gamma Activity",
-            0.0,
-            100.0,
-            10.0,
-            key="gamma_slider"
-        )
-
-        # =====================================================
-        # STORE EEG INPUT VALUES
-        # =====================================================
-        st.session_state.alpha = alpha
-        st.session_state.beta = beta
-        st.session_state.gamma = gamma
-
-        # =====================================================
-        # RUN AI
-        # =====================================================
-        if st.button(
-            "🚀 Run AI Examination",
-            use_container_width=True
-        ):
-
-            with st.spinner(
-                "Running AI EEG Analysis..."
-            ):
-
-                signal = generate_signal(
-                    alpha,
-                    beta,
-                    gamma
-                )
-
-                full_img, cnn_img = generate_spectrogram(
-                    signal
-                )
-
-                alpha_pct, beta_pct, gamma_pct = calculate_band_power(
-                    signal
-                )
-
-                img = cv2.imread(cnn_img)
-
-                img = cv2.resize(
-                    img,
-                    (224, 224)
-                )
-
-                img = img / 255.0
-
-                img = np.expand_dims(
-                    img,
-                    axis=0
-                )
-
-                numeric = np.array(
-                    [[
-                        alpha_pct,
-                        beta_pct,
-                        gamma_pct
-                    ]]
-                )
-
-                # =====================================================
-                # DYNAMIC AI LOGIC
-                # =====================================================
-
-                try:
-
                     # =====================================================
-                    # EEG DECISION LOGIC
+                    # DYNAMIC AI LOGIC
                     # =====================================================
 
-                    if (
-                        st.session_state.beta >= st.session_state.alpha
-                        and
-                        st.session_state.beta >= st.session_state.gamma
-                    ):
+                    try:
 
-                        predicted_class = "High Stress"
+                        # =====================================================
+                        # EEG DECISION LOGIC
+                        # =====================================================
 
-                        confidence = float(
-                            st.session_state.beta
-                        )
+                        if st.session_state.beta >= 60:
 
-                        risk_score = float(
-                            st.session_state.beta
-                        )
+                            predicted_class = "High Stress"
 
-                    elif (
-                        st.session_state.alpha >= st.session_state.beta
-                        and
-                        st.session_state.alpha >= st.session_state.gamma
-                    ):
+                            confidence = float(st.session_state.beta)
 
-                        predicted_class = "Relaxed"
+                            risk_score = float(st.session_state.beta)
 
-                        confidence = float(
-                            st.session_state.alpha
-                        )
+                        elif st.session_state.alpha >= 60:
 
-                        risk_score = 20.0
+                            predicted_class = "Relaxed"
 
-                    else:
+                            confidence = float(st.session_state.alpha)
+
+                            risk_score = 20.0
+
+                        elif st.session_state.gamma >= 60:
+
+                            predicted_class = "Normal"
+
+                            confidence = float(st.session_state.gamma)
+
+                            risk_score = 40.0
+
+                        else:
+
+                            predicted_class = "Normal"
+
+                            confidence = 60.0
+
+                            risk_score = 40.0
+
+                    except Exception as e:
+
+                        st.error(f"Prediction Error: {e}")
 
                         predicted_class = "Normal"
 
-                        confidence = float(
-                            st.session_state.gamma
-                        )
+                        confidence = 60.0
 
                         risk_score = 40.0
 
-                except Exception as e:
 
-                    st.error(
-                        f"Prediction Error: {e}"
-                    )
+                    st.session_state.prediction_done = True
 
-                    predicted_class = "Normal"
+                    st.session_state.alpha_pct = alpha_pct
+                    st.session_state.beta_pct = beta_pct
+                    st.session_state.gamma_pct = gamma_pct
 
-                    confidence = 60.0
+                    st.session_state.predicted_class = predicted_class
 
-                    risk_score = 40.0
+                    st.session_state.confidence = confidence
 
-                # =====================================================
-                # STORE RESULTS
-                # =====================================================
+                    st.session_state.risk_score = risk_score
 
-                st.session_state.prediction_done = True
+                    st.session_state.full_img = full_img
 
-                st.session_state.alpha_pct = alpha_pct
-                st.session_state.beta_pct = beta_pct
-                st.session_state.gamma_pct = gamma_pct
-
-                st.session_state.predicted_class = predicted_class
-
-                st.session_state.confidence = confidence
-
-                st.session_state.risk_score = risk_score
-
-                st.session_state.full_img = full_img
-
-                st.success(
-                    "✅ AI Analysis Completed"
-                )
+                    st.success("✅ AI Analysis Completed")
     # =====================================================
     # TAB 2 - AI ANALYSIS
     # =====================================================
