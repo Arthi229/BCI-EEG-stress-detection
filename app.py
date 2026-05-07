@@ -2774,70 +2774,70 @@ if page == "🧠 EEG Examination":
 # DYNAMIC AI LOGIC
 # =====================================================
 
-                try:
+                    try:
 
-                    # =====================================================
-                    # EEG DECISION LOGIC
-                    # =====================================================
+                        # =====================================================
+                        # EEG DECISION LOGIC
+                        # =====================================================
 
-                    if (
-                        st.session_state.beta >= st.session_state.alpha
-                        and
-                        st.session_state.beta >= st.session_state.gamma
-                    ):
+                        if (
+                            st.session_state.beta >= st.session_state.alpha
+                            and
+                            st.session_state.beta >= st.session_state.gamma
+                        ):
 
-                        predicted_class = "High Stress"
+                            predicted_class = "High Stress"
 
-                        confidence = float(st.session_state.beta)
+                            confidence = float(st.session_state.beta)
 
-                        risk_score = float(st.session_state.beta)
+                            risk_score = float(st.session_state.beta)
 
-                    elif (
-                        st.session_state.alpha >= st.session_state.beta
-                        and
-                        st.session_state.alpha >= st.session_state.gamma
-                    ):
+                        elif (
+                            st.session_state.alpha >= st.session_state.beta
+                            and
+                            st.session_state.alpha >= st.session_state.gamma
+                        ):
 
-                        predicted_class = "Relaxed"
+                            predicted_class = "Relaxed"
 
-                        confidence = float(st.session_state.alpha)
+                            confidence = float(st.session_state.alpha)
 
-                        risk_score = 20.0
+                            risk_score = 20.0
 
-                    else:
+                        else:
+
+                            predicted_class = "Normal"
+
+                            confidence = float(st.session_state.gamma)
+
+                            risk_score = 40.0
+
+                    except Exception as e:
+
+                        st.error(f"Prediction Error: {e}")
 
                         predicted_class = "Normal"
 
-                        confidence = float(st.session_state.gamma)
+                        confidence = 60.0
 
                         risk_score = 40.0
 
-                except Exception as e:
 
-                    st.error(f"Prediction Error: {e}")
+                        st.session_state.prediction_done = True
 
-                    predicted_class = "Normal"
+                        st.session_state.alpha_pct = alpha_pct
+                        st.session_state.beta_pct = beta_pct
+                        st.session_state.gamma_pct = gamma_pct
 
-                    confidence = 60.0
+                        st.session_state.predicted_class = predicted_class
 
-                    risk_score = 40.0
+                        st.session_state.confidence = confidence
 
+                        st.session_state.risk_score = risk_score
 
-                    st.session_state.prediction_done = True
+                        st.session_state.full_img = full_img
 
-                    st.session_state.alpha_pct = alpha_pct
-                    st.session_state.beta_pct = beta_pct
-                    st.session_state.gamma_pct = gamma_pct
-
-                    st.session_state.predicted_class = predicted_class
-
-                    st.session_state.confidence = confidence
-
-                    st.session_state.risk_score = risk_score
-
-                    st.session_state.full_img = full_img
-
-                    st.success("✅ AI Analysis Completed")
+                        st.success("✅ AI Analysis Completed")
     # =====================================================
     # TAB 2 - AI ANALYSIS
     # =====================================================
