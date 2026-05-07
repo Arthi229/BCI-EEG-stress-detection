@@ -2780,7 +2780,7 @@ if page == "🧠 EEG Examination":
                         # EEG DECISION LOGIC
                         # =====================================================
 
-                        if st.session_state.beta >= 60:
+                        if st.session_state.beta >= 20:
 
                             predicted_class = "High Stress"
 
@@ -2788,7 +2788,7 @@ if page == "🧠 EEG Examination":
 
                             risk_score = float(st.session_state.beta)
 
-                        elif st.session_state.alpha >= 60:
+                        elif st.session_state.alpha >= 20:
 
                             predicted_class = "Relaxed"
 
@@ -2796,7 +2796,7 @@ if page == "🧠 EEG Examination":
 
                             risk_score = 20.0
 
-                        elif st.session_state.gamma >= 60:
+                        elif st.session_state.gamma >= 20:
 
                             predicted_class = "Normal"
 
