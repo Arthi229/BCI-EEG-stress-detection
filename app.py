@@ -9,7 +9,6 @@ import requests
 import time
 
 from datetime import datetime
-from tensorflow.keras.models import load_model
 from streamlit_lottie import st_lottie
 
 from utils.signal_generator import generate_signal
@@ -778,26 +777,21 @@ if not st.session_state.logged_in:
 init_db()
 
 
-# LOAD MODEL
+# =====================================================
+# DEMO AI MODEL
+# =====================================================
+
+class DummyModel:
+
+    def predict(self, data):
+
+        return np.array([[0.10, 0.82, 0.08]])
+
 
 @st.cache_resource
 def load_trained_model():
 
-    try:
-
-        model = load_model(
-            "trained_hybrid_model.h5",
-            compile=False,
-            safe_mode=False
-        )
-
-    except Exception as e:
-
-        st.error(f"Model loading failed: {e}")
-
-        model = None
-
-    return model
+    return DummyModel()
 
 
 model = load_trained_model()
