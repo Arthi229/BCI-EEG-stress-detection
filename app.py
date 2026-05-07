@@ -35,22 +35,29 @@ st.markdown(
 )
 
 
-# LOAD LOTTIE
+# LOAD MODEL
 
-
-def load_lottie(url):
+@st.cache_resource
+def load_trained_model():
 
     try:
 
-        r = requests.get(url)
+        model = load_model(
+            "trained_hybrid_model.h5",
+            compile=False,
+            safe_mode=False
+        )
 
-        if r.status_code != 200:
-            return None
+    except Exception as e:
 
-        return r.json()
+        st.error(f"Model loading failed: {e}")
 
-    except:
-        return None
+        model = None
+
+    return model
+
+
+model = load_trained_model()
 
 
 # LOGIN SESSION
@@ -2775,7 +2782,23 @@ if page == "🧠 EEG Examination":
 
                     numeric = np.array([[alpha_pct, beta_pct, gamma_pct]])
 
-                    prediction = model.predict([img, numeric])
+                    if model is not None:
+
+                        prediction = model.predict(
+                            [img, numeric]
+                        )
+
+                        confidence = float(
+                            prediction[0][0]
+                        )
+
+                    else:
+
+                        st.error(
+                            "❌ AI model failed to load."
+                        )
+
+                        confidence = 0
 
                     classes = ["Relaxed", "High Stress", "Normal"]
 
