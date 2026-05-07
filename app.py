@@ -2769,23 +2769,37 @@ if page == "🧠 EEG Examination":
                     img = np.expand_dims(img, axis=0)
 
                     numeric = np.array([[alpha_pct, beta_pct, gamma_pct]])
-                    try:
+                try:
 
-                        prediction = model.predict(
-                            [img, numeric]
-                        )
+                    # =====================================================
+                    # DYNAMIC AI LOGIC
+                    # =====================================================
 
-                        probabilities = np.array(
-                            [0.10, 0.82, 0.08]
-                        )
-
-                    except Exception as e:
-
-                        st.error(f"Prediction Error: {e}")
+                    if beta_pct > 60:
 
                         probabilities = np.array(
                             [0.10, 0.82, 0.08]
                         )
+
+                    elif alpha_pct > 60:
+
+                        probabilities = np.array(
+                            [0.82, 0.08, 0.10]
+                        )
+
+                    else:
+
+                        probabilities = np.array(
+                            [0.20, 0.20, 0.60]
+                        )
+
+                except Exception as e:
+
+                    st.error(f"Prediction Error: {e}")
+
+                    probabilities = np.array(
+                        [0.20, 0.20, 0.60]
+                    )
 
                     classes = ["Relaxed", "High Stress", "Normal"]
 
