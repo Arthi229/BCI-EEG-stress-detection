@@ -2770,7 +2770,7 @@ if page == "🧠 EEG Examination":
 
                     numeric = np.array([[alpha_pct, beta_pct, gamma_pct]])
 
-                    # =====================================================
+# =====================================================
 # TAB 1 - EEG SIGNAL
 # =====================================================
 with tab1:
@@ -2781,21 +2781,24 @@ with tab1:
             "Alpha Activity",
             0.0,
             100.0,
-            20.0
+            20.0,
+            key="alpha_slider"
         )
 
         beta = st.slider(
             "Beta Activity",
             0.0,
             100.0,
-            15.0
+            15.0,
+            key="beta_slider"
         )
 
         gamma = st.slider(
             "Gamma Activity",
             0.0,
             100.0,
-            10.0
+            10.0,
+            key="gamma_slider"
         )
 
         # =====================================================
